@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elmet Strategic Themes Analysis</title>
+    <title>Elmet Strategic Themes & Actions Analysis</title>
     <style>
         * {
             margin: 0;
@@ -16,33 +16,43 @@
             background: #1a1a1a;
             color: #fff;
             overflow: hidden;
+            height: 100vh;
         }
 
         .presentation-container {
-            width: 100vw;
+            width: 100%;
             height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
+        .slides-wrapper {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
         .slide {
-            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: calc(100vh - 80px);
+            height: 100%;
             padding: 60px;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            position: relative;
             overflow-y: auto;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.5s ease-out;
         }
 
         .slide.active {
-            display: block;
-            animation: slideIn 0.5s ease-out;
+            opacity: 1;
+            transform: translateX(0);
         }
 
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        .slide.prev {
+            transform: translateX(-100%);
         }
 
         .slide h1 {
@@ -86,6 +96,15 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
+        .action-card {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .action-card:hover {
+            background: rgba(255, 215, 0, 0.15);
+        }
+
         .theme-priority {
             display: inline-block;
             background: #ff6b6b;
@@ -107,6 +126,17 @@
 
         .theme-priority.low {
             background: #3742fa;
+        }
+
+        .action-priority {
+            display: inline-block;
+            background: #00b894;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
 
         .theme-list {
@@ -150,7 +180,7 @@
             transition: all 0.3s ease;
         }
 
-        .nav-button:hover {
+        .nav-button:hover:not(:disabled) {
             background: #3a62a8;
             transform: scale(1.05);
         }
@@ -158,7 +188,7 @@
         .nav-button:disabled {
             background: #555;
             cursor: not-allowed;
-            transform: scale(1);
+            opacity: 0.5;
         }
 
         .slide-indicator {
@@ -239,6 +269,38 @@
             font-size: 18px;
         }
 
+        .split-view {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .split-section {
+            max-height: calc(100vh - 300px);
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .split-section h2 {
+            position: sticky;
+            top: 0;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
+            margin-bottom: 20px;
+            z-index: 10;
+        }
+
+        .action-item {
+            background: rgba(0, 255, 170, 0.05);
+            border-left: 3px solid #00ff88;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
         @media (max-width: 768px) {
             .slide {
                 padding: 30px;
@@ -255,6 +317,10 @@
             .overview-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .split-view {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -262,24 +328,26 @@
     <div class="presentation-container">
         <div class="slides-wrapper">
             <!-- Title Slide -->
-            <div class="slide active title-slide">
-                <h1>Strategic Themes Analysis</h1>
-                <p class="subtitle">Aggregated & Prioritized Insights from Elmet Homework Grid</p>
-                <div class="overview-grid">
-                    <div class="overview-card">
-                        <h3>Technology</h3>
-                        <div class="count">56</div>
-                        <p>Business & Customer</p>
-                    </div>
-                    <div class="overview-card">
-                        <h3>Market & Industry</h3>
-                        <div class="count">45</div>
-                        <p>Customer & Competitive</p>
-                    </div>
-                    <div class="overview-card">
-                        <h3>External Factors</h3>
-                        <div class="count">79</div>
-                        <p>Regulatory, Political, Environmental</p>
+            <div class="slide active">
+                <div class="title-slide">
+                    <h1>Strategic Themes & Actions Analysis</h1>
+                    <p class="subtitle">Comprehensive Insights from Elmet Homework Grid</p>
+                    <div class="overview-grid">
+                        <div class="overview-card">
+                            <h3>Total Responses</h3>
+                            <div class="count">193</div>
+                            <p>Strategic themes identified</p>
+                        </div>
+                        <div class="overview-card">
+                            <h3>Action Items</h3>
+                            <div class="count">188</div>
+                            <p>"So we need to..." items</p>
+                        </div>
+                        <div class="overview-card">
+                            <h3>Categories</h3>
+                            <div class="count">11</div>
+                            <p>Strategic focus areas</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -287,47 +355,45 @@
             <!-- Technology for Business Slide -->
             <div class="slide">
                 <h1>Technology for the Business</h1>
-                <span class="entry-count">34 responses</span>
-                <div class="theme-grid">
-                    <div class="theme-card">
-                        <span class="theme-priority high">HIGH PRIORITY (11)</span>
-                        <h3>AI & Machine Learning</h3>
-                        <ul class="theme-list">
-                            <li>AI for on-time delivery management</li>
-                            <li>Predictive analytics & insights</li>
-                            <li>Machine learning applications</li>
-                            <li>Intelligent automation</li>
-                        </ul>
+                <span class="entry-count">34 themes | 33 actions</span>
+                <div class="split-view">
+                    <div class="split-section">
+                        <h2>Strategic Themes</h2>
+                        <div class="theme-card">
+                            <span class="theme-priority high">HIGH PRIORITY (11)</span>
+                            <h3>AI & Machine Learning</h3>
+                            <ul class="theme-list">
+                                <li>AI for on-time delivery management</li>
+                                <li>Predictive analytics & insights</li>
+                                <li>Machine learning applications</li>
+                                <li>Intelligent automation</li>
+                            </ul>
+                        </div>
+                        <div class="theme-card">
+                            <span class="theme-priority high">HIGH PRIORITY (6)</span>
+                            <h3>Data & Analytics</h3>
+                            <ul class="theme-list">
+                                <li>Advanced data analysis tools</li>
+                                <li>Business intelligence platforms</li>
+                                <li>Real-time metrics & KPIs</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="theme-card">
-                        <span class="theme-priority high">HIGH PRIORITY (6)</span>
-                        <h3>Data & Analytics</h3>
-                        <ul class="theme-list">
-                            <li>Advanced data analysis tools</li>
-                            <li>Business intelligence platforms</li>
-                            <li>Real-time metrics & KPIs</li>
-                            <li>Data-driven decision making</li>
-                        </ul>
-                    </div>
-                    <div class="theme-card">
-                        <span class="theme-priority medium">MEDIUM PRIORITY (5)</span>
-                        <h3>Automation & Efficiency</h3>
-                        <ul class="theme-list">
-                            <li>Process automation</li>
-                            <li>Workflow optimization</li>
-                            <li>Robotic process automation (RPA)</li>
-                            <li>Efficiency improvements</li>
-                        </ul>
-                    </div>
-                    <div class="theme-card">
-                        <span class="theme-priority medium">MEDIUM PRIORITY (5)</span>
-                        <h3>Digital Transformation</h3>
-                        <ul class="theme-list">
-                            <li>Cloud migration initiatives</li>
-                            <li>Modern technology adoption</li>
-                            <li>Digital-first processes</li>
-                            <li>Legacy system upgrades</li>
-                        </ul>
+                    <div class="split-section">
+                        <h2>Key Actions Needed</h2>
+                        <div class="action-card">
+                            <span class="action-priority">TOP ACTIONS (10)</span>
+                            <h3>Strategy & Planning</h3>
+                            <div class="action-item">Create AI implementation roadmap</div>
+                            <div class="action-item">Execute with investment in people and CapEx</div>
+                            <div class="action-item">Identify CMMC-compliant AI tools</div>
+                        </div>
+                        <div class="action-card">
+                            <span class="action-priority">CRITICAL (8)</span>
+                            <h3>Training & Education</h3>
+                            <div class="action-item">Provide AI/ML training for teams</div>
+                            <div class="action-item">Support employees with future vision</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -335,7 +401,7 @@
             <!-- Technology for Customers Slide -->
             <div class="slide">
                 <h1>Technology for Customers</h1>
-                <span class="entry-count">22 responses</span>
+                <span class="entry-count">22 themes | 22 actions</span>
                 <div class="theme-grid">
                     <div class="theme-card">
                         <span class="theme-priority high">HIGH PRIORITY (8)</span>
@@ -354,7 +420,6 @@
                             <li>Production equipment modernization</li>
                             <li>Quality enhancement technology</li>
                             <li>Reliability improvements</li>
-                            <li>Advanced manufacturing capabilities</li>
                         </ul>
                     </div>
                     <div class="theme-card">
@@ -364,16 +429,16 @@
                             <li>Self-service portals</li>
                             <li>Mobile applications</li>
                             <li>Digital interfaces</li>
-                            <li>Enhanced user experience</li>
                         </ul>
                     </div>
-                    <div class="theme-card">
-                        <span class="theme-priority low">LOW PRIORITY (3)</span>
-                        <h3>Integration & Connectivity</h3>
+                    <div class="action-card">
+                        <span class="action-priority">KEY ACTIONS</span>
+                        <h3>Implementation Focus</h3>
                         <ul class="theme-list">
-                            <li>System integrations</li>
-                            <li>API connections</li>
-                            <li>Seamless data flow</li>
+                            <li>Automate quoting for non-government</li>
+                            <li>Develop competitive edge alloys</li>
+                            <li>Improve quality to best-in-class</li>
+                            <li>Build customer portal expertise</li>
                         </ul>
                     </div>
                 </div>
@@ -382,7 +447,7 @@
             <!-- Regulatory Slide -->
             <div class="slide">
                 <h1>Regulatory Landscape</h1>
-                <span class="entry-count">22 responses</span>
+                <span class="entry-count">22 themes | 21 actions</span>
                 <div class="theme-grid">
                     <div class="theme-card">
                         <span class="theme-priority high">HIGH PRIORITY (9)</span>
@@ -401,126 +466,16 @@
                             <li>Regulatory risk assessment</li>
                             <li>Compliance monitoring</li>
                             <li>Policy updates & tracking</li>
-                            <li>Mitigation strategies</li>
                         </ul>
                     </div>
-                    <div class="theme-card">
-                        <span class="theme-priority medium">MEDIUM PRIORITY (6)</span>
-                        <h3>Documentation & Reporting</h3>
+                    <div class="action-card">
+                        <span class="action-priority">CRITICAL ACTIONS</span>
+                        <h3>2027 Compliance Roadmap</h3>
                         <ul class="theme-list">
-                            <li>Automated compliance reporting</li>
-                            <li>Documentation management</li>
-                            <li>Regulatory filing systems</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Socio-Demographic Slide -->
-            <div class="slide">
-                <h1>Socio-Demographic Trends</h1>
-                <span class="entry-count">11 responses</span>
-                <div class="theme-grid">
-                    <div class="theme-card">
-                        <span class="theme-priority high">HIGH PRIORITY (5)</span>
-                        <h3>Workforce Development</h3>
-                        <ul class="theme-list">
-                            <li>Skills gap addressing</li>
-                            <li>Training programs</li>
-                            <li>Talent acquisition</li>
-                            <li>Next-gen workforce prep</li>
-                        </ul>
-                    </div>
-                    <div class="theme-card">
-                        <span class="theme-priority medium">MEDIUM PRIORITY (4)</span>
-                        <h3>Demographic Shifts</h3>
-                        <ul class="theme-list">
-                            <li>Aging workforce considerations</li>
-                            <li>Gen Z integration</li>
-                            <li>Remote work adaptation</li>
-                        </ul>
-                    </div>
-                    <div class="theme-card">
-                        <span class="theme-priority low">LOW PRIORITY (2)</span>
-                        <h3>Social Responsibility</h3>
-                        <ul class="theme-list">
-                            <li>Community engagement</li>
-                            <li>Diversity initiatives</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Industry/Competitive Slide -->
-            <div class="slide">
-                <h1>Industry & Competitive Landscape</h1>
-                <span class="entry-count">22 responses</span>
-                <div class="theme-grid">
-                    <div class="theme-card">
-                        <span class="theme-priority high">HIGH PRIORITY (8)</span>
-                        <h3>Competitive Positioning</h3>
-                        <ul class="theme-list">
-                            <li>Market differentiation</li>
-                            <li>Competitive advantages</li>
-                            <li>Value proposition clarity</li>
-                            <li>Strategic positioning</li>
-                        </ul>
-                    </div>
-                    <div class="theme-card">
-                        <span class="theme-priority medium">MEDIUM PRIORITY (7)</span>
-                        <h3>Industry Trends</h3>
-                        <ul class="theme-list">
-                            <li>Emerging technologies adoption</li>
-                            <li>Industry consolidation</li>
-                            <li>New business models</li>
-                            <li>Market disruptions</li>
-                        </ul>
-                    </div>
-                    <div class="theme-card">
-                        <span class="theme-priority medium">MEDIUM PRIORITY (7)</span>
-                        <h3>Innovation & Growth</h3>
-                        <ul class="theme-list">
-                            <li>R&D investments</li>
-                            <li>Product innovation</li>
-                            <li>Service expansion</li>
-                            <li>New market entry</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Macroeconomic Slide -->
-            <div class="slide">
-                <h1>Macroeconomic Factors</h1>
-                <span class="entry-count">19 responses</span>
-                <div class="theme-grid">
-                    <div class="theme-card">
-                        <span class="theme-priority high">HIGH PRIORITY (8)</span>
-                        <h3>Economic Volatility</h3>
-                        <ul class="theme-list">
-                            <li>Inflation impact management</li>
-                            <li>Interest rate considerations</li>
-                            <li>Currency fluctuations</li>
-                            <li>Economic uncertainty planning</li>
-                        </ul>
-                    </div>
-                    <div class="theme-card">
-                        <span class="theme-priority medium">MEDIUM PRIORITY (6)</span>
-                        <h3>Cost Management</h3>
-                        <ul class="theme-list">
-                            <li>Raw material cost tracking</li>
-                            <li>Energy price volatility</li>
-                            <li>Labor cost pressures</li>
-                            <li>Margin protection</li>
-                        </ul>
-                    </div>
-                    <div class="theme-card">
-                        <span class="theme-priority medium">MEDIUM PRIORITY (5)</span>
-                        <h3>Market Dynamics</h3>
-                        <ul class="theme-list">
-                            <li>Demand forecasting</li>
-                            <li>Market cycle planning</li>
-                            <li>Investment timing</li>
+                            <li>Complete 100+ items for ADG business</li>
+                            <li>Align white paper govt requests</li>
+                            <li>Execute cost-effective strategy</li>
+                            <li>Partner for non-Chinese production</li>
                         </ul>
                     </div>
                 </div>
@@ -529,7 +484,7 @@
             <!-- Customer/Market Slide -->
             <div class="slide">
                 <h1>Customer & Market Insights</h1>
-                <span class="entry-count">23 responses</span>
+                <span class="entry-count">23 themes | 22 actions</span>
                 <div class="theme-grid">
                     <div class="theme-card">
                         <span class="theme-priority high">HIGH PRIORITY (10)</span>
@@ -542,123 +497,22 @@
                         </ul>
                     </div>
                     <div class="theme-card">
-                        <span class="theme-priority high">MEDIUM PRIORITY (7)</span>
+                        <span class="theme-priority medium">MEDIUM PRIORITY (7)</span>
                         <h3>Market Expansion</h3>
                         <ul class="theme-list">
                             <li>New segment identification</li>
                             <li>Geographic expansion</li>
                             <li>Product line extensions</li>
-                            <li>Channel development</li>
                         </ul>
                     </div>
-                    <div class="theme-card">
-                        <span class="theme-priority medium">MEDIUM PRIORITY (6)</span>
-                        <h3>Relationship Management</h3>
+                    <div class="action-card">
+                        <span class="action-priority">STRATEGIC ACTIONS</span>
+                        <h3>Value Creation</h3>
                         <ul class="theme-list">
-                            <li>CRM optimization</li>
-                            <li>Account management</li>
-                            <li>Partnership development</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Supplier Slide -->
-            <div class="slide">
-                <h1>Supplier Ecosystem</h1>
-                <span class="entry-count">15 responses</span>
-                <div class="theme-grid">
-                    <div class="theme-card">
-                        <span class="theme-priority high">HIGH PRIORITY (7)</span>
-                        <h3>Supply Chain Resilience</h3>
-                        <ul class="theme-list">
-                            <li>Supplier diversification</li>
-                            <li>Risk mitigation strategies</li>
-                            <li>Alternative sourcing</li>
-                            <li>Supply chain visibility</li>
-                        </ul>
-                    </div>
-                    <div class="theme-card">
-                        <span class="theme-priority medium">MEDIUM PRIORITY (5)</span>
-                        <h3>Vendor Management</h3>
-                        <ul class="theme-list">
-                            <li>Performance tracking</li>
-                            <li>Relationship optimization</li>
-                            <li>Contract management</li>
-                            <li>Quality assurance</li>
-                        </ul>
-                    </div>
-                    <div class="theme-card">
-                        <span class="theme-priority low">LOW PRIORITY (3)</span>
-                        <h3>Integration & Collaboration</h3>
-                        <ul class="theme-list">
-                            <li>Digital integration</li>
-                            <li>Collaborative planning</li>
-                            <li>Information sharing</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Environmental Slide -->
-            <div class="slide">
-                <h1>Environmental Considerations</h1>
-                <span class="entry-count">9 responses</span>
-                <div class="theme-grid">
-                    <div class="theme-card">
-                        <span class="theme-priority medium">MEDIUM PRIORITY (5)</span>
-                        <h3>Sustainability Initiatives</h3>
-                        <ul class="theme-list">
-                            <li>Carbon footprint reduction</li>
-                            <li>Renewable energy adoption</li>
-                            <li>Waste management</li>
-                            <li>Circular economy practices</li>
-                        </ul>
-                    </div>
-                    <div class="theme-card">
-                        <span class="theme-priority low">LOW PRIORITY (4)</span>
-                        <h3>Environmental Compliance</h3>
-                        <ul class="theme-list">
-                            <li>Environmental regulations</li>
-                            <li>Reporting requirements</li>
-                            <li>Green certifications</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Political Slide -->
-            <div class="slide">
-                <h1>Political Landscape</h1>
-                <span class="entry-count">14 responses</span>
-                <div class="theme-grid">
-                    <div class="theme-card">
-                        <span class="theme-priority medium">MEDIUM PRIORITY (6)</span>
-                        <h3>Policy & Regulation</h3>
-                        <ul class="theme-list">
-                            <li>Trade policy impacts</li>
-                            <li>Tax considerations</li>
-                            <li>Government incentives</li>
-                            <li>Regulatory changes</li>
-                        </ul>
-                    </div>
-                    <div class="theme-card">
-                        <span class="theme-priority medium">MEDIUM PRIORITY (5)</span>
-                        <h3>Geopolitical Risks</h3>
-                        <ul class="theme-list">
-                            <li>International tensions</li>
-                            <li>Trade restrictions</li>
-                            <li>Supply chain disruptions</li>
-                            <li>Market access</li>
-                        </ul>
-                    </div>
-                    <div class="theme-card">
-                        <span class="theme-priority low">LOW PRIORITY (3)</span>
-                        <h3>Government Relations</h3>
-                        <ul class="theme-list">
-                            <li>Policy advocacy</li>
-                            <li>Industry representation</li>
-                            <li>Public-private partnerships</li>
+                            <li>Align pricing to value-add</li>
+                            <li>Provide supply-chain solutions</li>
+                            <li>Partner with end-use customers</li>
+                            <li>Address quality issues comprehensively</li>
                         </ul>
                     </div>
                 </div>
@@ -666,10 +520,10 @@
 
             <!-- Summary Slide -->
             <div class="slide">
-                <h1>Strategic Priorities Summary</h1>
+                <h1>Strategic Priorities & Actions Summary</h1>
                 <div class="theme-grid">
                     <div class="theme-card">
-                        <h2 style="color: #ff4757;">Top Priorities</h2>
+                        <h2 style="color: #ff4757;">Top Strategic Themes</h2>
                         <ul class="theme-list">
                             <li><strong>AI & Machine Learning</strong> - 11 mentions</li>
                             <li><strong>Customer Experience</strong> - 10 mentions</li>
@@ -680,25 +534,25 @@
                         </ul>
                     </div>
                     <div class="theme-card">
-                        <h2 style="color: #ffa502;">Key Action Areas</h2>
+                        <h2 style="color: #00b894;">Top Action Categories</h2>
                         <ul class="theme-list">
-                            <li>Accelerate digital transformation</li>
-                            <li>Enhance data analytics capabilities</li>
-                            <li>Improve customer responsiveness</li>
-                            <li>Strengthen supply chain resilience</li>
-                            <li>Address workforce development</li>
-                            <li>Manage regulatory compliance</li>
+                            <li><strong>Strategy & Planning</strong> - 33 actions</li>
+                            <li><strong>Implementation & Development</strong> - 32 actions</li>
+                            <li><strong>Investment & Funding</strong> - 23 actions</li>
+                            <li><strong>Training & Education</strong> - 17 actions</li>
+                            <li><strong>Partnership & Collaboration</strong> - 13 actions</li>
+                            <li><strong>Process Improvement</strong> - 12 actions</li>
                         </ul>
                     </div>
                     <div class="theme-card">
-                        <h2 style="color: #3742fa;">Strategic Enablers</h2>
+                        <h2 style="color: #ffd700;">Critical Next Steps</h2>
                         <ul class="theme-list">
-                            <li>Technology modernization</li>
-                            <li>Process automation</li>
-                            <li>Talent development</li>
-                            <li>Risk management</li>
-                            <li>Innovation culture</li>
-                            <li>Sustainability focus</li>
+                            <li>Create AI/ML implementation roadmap</li>
+                            <li>Automate quote generation processes</li>
+                            <li>Complete regulatory compliance by 2027</li>
+                            <li>Build supply chain partnerships</li>
+                            <li>Develop nuclear energy strategy</li>
+                            <li>Strengthen government relations</li>
                         </ul>
                     </div>
                 </div>
@@ -717,9 +571,9 @@
         const slides = document.querySelectorAll('.slide');
         const totalSlides = slides.length;
 
-        // Initialize slide indicators
         function initializeIndicators() {
             const indicatorContainer = document.getElementById('slideIndicator');
+            indicatorContainer.innerHTML = '';
             for (let i = 0; i < totalSlides; i++) {
                 const dot = document.createElement('span');
                 dot.className = 'dot';
@@ -729,55 +583,46 @@
             }
         }
 
-        // Update slide visibility
-        function showSlide(n) {
-            slides.forEach(slide => slide.classList.remove('active'));
+        function showSlide(index) {
+            if (index < 0) index = totalSlides - 1;
+            if (index >= totalSlides) index = 0;
             
-            if (n >= totalSlides) currentSlide = 0;
-            if (n < 0) currentSlide = totalSlides - 1;
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active', 'prev');
+                if (i < index) slide.classList.add('prev');
+            });
             
+            currentSlide = index;
             slides[currentSlide].classList.add('active');
             
-            // Update navigation buttons
+            // Update buttons
             document.getElementById('prevBtn').disabled = currentSlide === 0;
             document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
             
-            // Update indicators
+            // Update dots
             const dots = document.querySelectorAll('.dot');
-            dots.forEach(dot => dot.classList.remove('active'));
-            dots[currentSlide].classList.add('active');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
         }
 
-        // Change slide
         function changeSlide(direction) {
-            currentSlide += direction;
-            showSlide(currentSlide);
+            showSlide(currentSlide + direction);
         }
 
-        // Go to specific slide
-        function goToSlide(n) {
-            currentSlide = n;
-            showSlide(currentSlide);
+        function goToSlide(index) {
+            showSlide(index);
         }
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft') changeSlide(-1);
             if (e.key === 'ArrowRight') changeSlide(1);
-            if (e.key === 'Home') goToSlide(0);
-            if (e.key === 'End') goToSlide(totalSlides - 1);
         });
 
         // Initialize
         initializeIndicators();
         showSlide(0);
-
-        // Auto-advance slides (optional - uncomment to enable)
-        // setInterval(() => {
-        //     if (currentSlide < totalSlides - 1) {
-        //         changeSlide(1);
-        //     }
-        // }, 10000); // Change slide every 10 seconds
     </script>
 </body>
 </html>
